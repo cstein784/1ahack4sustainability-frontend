@@ -6,26 +6,25 @@
   <li>Check console: Some outputs are there too</li>
   <li>Documentation about RailKit API: <a href="https://github.com/amadeus4dev-events/Developer-guide/blob/main/RailkitApi/README.md" target="_blank">here</a></li>
 </ul>
-<h2>Search Results: </h2>
-<div *ngIf="itineraries.length > 0">
+<h2>Search Results: {{ travelOffers.length }}</h2>
+<div *ngIf="travelOffers.length > 0">
     
-    <ng-container *ngFor="let iti of itineraries;">
-      <mat-card class="flight-card"
-          tabindex="0">
+    <ng-container *ngFor="let iti of travelOffers;">
+      <mat-card class="flight-card" tabindex="0" *ngIf="iti.itinerary.bookableStatus=='BOOKABLE'" (click)="selection.emit()">
         <div>
-          <div class="info">{{iti.departureDateTime | date: 'E dd MMM'}}</div>
-          <div class="date">{{iti.departureDateTime | date: 'HH:mm'}}</div>
-          <div class="info">{{iti.origin.name}}</div>
+          <div class="info">{{iti.itinerary.departureDateTime | date: 'E dd MMM'}}</div>
+          <div class="date">{{iti.itinerary.departureDateTime | date: 'HH:mm'}}</div>
+          <div class="info">{{iti.itinerary.origin.name}}</div>
         </div>
         <div class="info">Duration: Xh Ym</div> 
                
         <div>
-          <div class="info">{{iti.arrivalDateTime | date: 'E dd MMM' }}</div>
-          <div class="date">{{iti.arrivalDateTime | date: 'HH:mm'  }}</div>
-          <div class="info">{{iti.destination.name}}</div>
+          <div class="info">{{iti.itinerary.arrivalDateTime | date: 'E dd MMM' }}</div>
+          <div class="date">{{iti.itinerary.arrivalDateTime | date: 'HH:mm'  }}</div>
+          <div class="info">{{iti.itinerary.destination.name}}</div>
         </div>   
         <div class="card-price">
-          <div>Price/Co2/...</div>
+          <div>{{ iti.itinerary.co2Emission }}KG of CO2</div>
         </div>             
     </mat-card>
     </ng-container>

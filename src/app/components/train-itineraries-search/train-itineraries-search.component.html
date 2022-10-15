@@ -19,12 +19,12 @@
                matInput>
     </mat-form-field> 
 
-    <!--<mat-form-field [floatLabel]="'always'">
+    <mat-form-field [floatLabel]="'always'">
       <mat-label>Departure date</mat-label>
-      <input name="departure-date" matInput [matDatepicker]="picker"  placeholder="MM/DD/YYYY">
+      <input name="departure-date" matInput [matDatepicker]="picker"  [formControl]="formGroup.controls.departureDate" placeholder="MM/DD/YYYY">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field> -->
+    </mat-form-field>
 
   <button mat-flat-button color="primary" aria-label="Search Trains" (click)="onSearch()">
   <mat-icon>search</mat-icon>

@@ -1,3 +1,4 @@
+import { dateWindowPattern } from '@amadeus/self-service-sdk-v2/models/base/date-time-range/date-time-range';
 import {Inject, Injectable} from '@angular/core';
 import * as CryptoJS from 'crypto-js';
 import { RailKitApiManagerConfig, RAILKIT_API_MANAGER_CONFIG_TOKEN } from './train-itineraries.tokens';
@@ -5,7 +6,19 @@ import { RailKitApiManagerConfig, RAILKIT_API_MANAGER_CONFIG_TOKEN } from './tra
 export interface TrainItinerariesResponse {
   data: {
     id: string,
-    itineraries: itinerary[]
+    //itineraries: itinerary[],
+    travelOffers: travelOffer[]
+  }
+}
+
+export interface travelOffer {
+  itinerary: itinerary
+  offers: offer[]
+}
+
+export interface offer {
+  totalPrice: {
+    amount: string;
   }
 }
 
@@ -17,7 +30,9 @@ export interface itinerary {
     name:string
   },
   departureDateTime: Date, 
-  arrivalDateTime: Date
+  arrivalDateTime: Date,
+  co2Emission:string,
+  bookableStatus:string
   
 }
 
@@ -32,7 +47,7 @@ export class TrainItinerariesService {
   /**
    * API call to retrieve train itineraries
    */
-   public async getTrainItineraries(origin: string, destination: string) {
+   public async getTrainItineraries(origin: string, destination: string, departureDate: Date) {
     const time = new Date().toISOString();
     //Compute the needed authorization token.
     //All credentials details are set in app.config.ts
@@ -44,7 +59,7 @@ export class TrainItinerariesService {
     //Call Railkit API in order to search for itineraries
     //Below example is hardcoding the origin (8727100 =Paris), detination (7015550 = London) and departure  (2022-10-16T10:33:00)
     //Details about the API in https://github.com/amadeus4dev-events/Developer-guide/blob/main/RailkitApi/README.md
-    const response = await fetch('/RailKitAPI/1ASIUMOBSBBU/rail/v1/itineraries/search', {
+    const response = await fetch('/RailKitAPI/1ASIUMOBSBBU/rail/v1/travel-offers/search', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -61,10 +76,10 @@ export class TrainItinerariesService {
         "searchCriteria" : {
         "distributor" : "SBB", //Keep SBB
         "language" : "EN",   //Keep EN 
-        "origin" : "8727100",   //TODO use input value
-        "destination" : "7015550", //TODO use input values
+        "origin" : origin,   //TODO use input value
+        "destination" : destination, //TODO use input values
         "dateTime" : {
-        "departure" : "2022-10-16T10:33:00"   //TODO use input values
+        "departure" : departureDate.toISOString().substring(0,10) + "T10:33:00"   //TODO use input values
         },
         "journeyOptions" : {
         "outboundOptions" : {

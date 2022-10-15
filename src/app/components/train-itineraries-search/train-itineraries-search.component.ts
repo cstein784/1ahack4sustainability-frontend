@@ -38,6 +38,9 @@ export class TrainItinerariesSearchComponent implements OnDestroy, ControlValueA
     ),
     destinationLocation: new FormControl<string>(
       "", [Validators.required]
+    ),
+    departureDate: new FormControl<Date | null>(
+      null, [Validators.required]
     )
   });
   /**
@@ -117,8 +120,9 @@ export class TrainItinerariesSearchComponent implements OnDestroy, ControlValueA
   writeValue(obj: Partial<SearchFormData>): void {
     if (obj) {
       this.formGroup.setValue({
-        originLocation: "Paris Nord", //initialized to these values as the sample API query is targetting these orignin and destination
-        destinationLocation: "London"
+        originLocation: "8727100", //initialized to these values as the sample API query is targetting these orignin and destination
+        destinationLocation: "7015550",
+        departureDate: null
       });
     }
   }
